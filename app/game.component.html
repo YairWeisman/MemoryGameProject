@@ -1,7 +1,15 @@
 <ul class="cards">
+
   	<li *ngFor="let card of cards | orderBy:random"
 	  [class.selected]="card === selectedCard"
 	  (click)="onSelect(card)">
 	  <img src="{{card.image}}">
 	</li>
+
+	<li *ngFor="let card of cards | orderBy:random"
+	  [class.selected]="card === selectedCard"
+	  (click)="onSelect(card)">
+	  <img src="{{card.image}}">
+	</li>
+	
 </ul>

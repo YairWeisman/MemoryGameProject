@@ -20,10 +20,11 @@ export class GameComponent implements OnInit, DoCheck {
   	didntPlay: boolean;
   	
 	constructor(
-	  private cardService: CardService) {}
+	  	private cardService: CardService) {}
 
 	ngOnInit(): void {
-	    this.getCards(Math.floor((Math.random()*10)+1));
+		// Pick between 4 to 10 cards.		
+	    this.getCards(Math.floor((Math.random()*7)+4));
 	    this.currentPlayer = AppComponent.user;
 	}
 		
