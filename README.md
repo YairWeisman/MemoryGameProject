@@ -1,1 +1,1 @@
-# MemoryGameProject
+Match Pairs memory game - an Angular2.0 exercise

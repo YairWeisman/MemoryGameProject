@@ -1,0 +1,12 @@
+
+<div *ngIf="!(start)">
+	<h3>Enter your name: <h3>
+    <input [(ngModel)]="user.name" placeholder="name" />
+    <button (click)="startGame()">Start</button>
+</div>
+<div *ngIf="start">
+	<header>
+   		<h1>{{user.name}} {{user.score}} - {{computer.score}} Computer</h1>
+	</header>
+	<match-pairs></match-pairs>
+</div>
