@@ -57,11 +57,12 @@ export class GameComponent implements OnInit, DoCheck {
 	    this.showRestart = false;
 	    this.computerIsPlaying = false;
 	}
-		
+	
 	getCards(numOfCards: number): void {
 	  	this.cards = this.shuffle(this.CARDS.slice(0, numOfCards * 2));
 	}
 
+	// Checking always...
 	ngDoCheck(): void {
 		// Check if game over
 		if (this.appComponent.user.score + this.appComponent.computer.score == this.numOfCardsPlayed) {
@@ -83,7 +84,7 @@ export class GameComponent implements OnInit, DoCheck {
 			this.showRestart = true;
 		}
 
-		// Check if computer turn
+		// Check if it's the computer turn
 		else if ((this.currentPlayer == this.appComponent.computer) && (!this.computerIsPlaying)) {
 			this.computerIsPlaying = true;
 			this.computerFirstPick();
@@ -100,6 +101,7 @@ export class GameComponent implements OnInit, DoCheck {
 
 	computerSecondPick(): void {
 		this.secondSelect = this.getRandomeCard();
+		// Pick valid card that's not the same as the first choice
 		while ((this.secondSelect === this.firstSelect) || (!this.validPick(this.secondSelect)))
 			this.secondSelect = this.getRandomeCard();
 		this.onSelect(this.secondSelect);
@@ -118,10 +120,8 @@ export class GameComponent implements OnInit, DoCheck {
 		  		this.firstSelect = card;
 		  		this.cardsPicked = 1;
 		  		this.firstSelect.changeStatus('peeked');
-		  		console.log('first pick');
 	  		}
 	  		else {
-	  			console.log('second pick');
 	  			this.cardsPicked = 0;
 	  			this.secondSelect = card;
 	  			this.secondSelect.changeStatus('peeked');
@@ -155,16 +155,8 @@ export class GameComponent implements OnInit, DoCheck {
 		}
 	}
 
-	getRandomNum(): number {
-		return Math.floor((Math.random()*this.numOfCardsPlayed)+1);
-	}
-
 	getRandomeCard(): Card {
 		return this.cards[Math.floor(Math.random()*this.numOfCardsPlayed*2)];
-	}
-
-	random(): number {
-		return Math.random();
 	}
 	
 	shuffle(array : Card[]): Card[] {
