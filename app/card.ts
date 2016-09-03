@@ -1,5 +1,8 @@
 export class Card {
-	id: number;
-	image: string;
-	status: string;
+
+	constructor(public uid: number, public id: number, public image: string, public status: string) {}
+
+	changeStatus(newStatus: string) : void {
+		this.status = newStatus;
+	}
 }

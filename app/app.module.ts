@@ -6,7 +6,6 @@ import { AppComponent }   from './app.component';
 
 import { GameComponent }      from './game.component';
 
-import { CardService }  from './card.service';
 
 @NgModule({
   imports: [
@@ -18,7 +17,6 @@ import { CardService }  from './card.service';
     GameComponent
   ],
   providers: [
-    CardService
   ],
   bootstrap: [ AppComponent ]
 })

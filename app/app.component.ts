@@ -4,7 +4,7 @@ import { OnInit } from '@angular/core';
 
 @Component({
 	selector: 'my-app',
-	templateUrl: 'app/components/app.component.html',
+	templateUrl: 'app/app.component.html',
 	styleUrls: ['app/app.component.css']
 })
 export class AppComponent implements OnInit {
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   	computer: Player = {
   		score: 0,
   		name: 'Computer'
-  	}
+  	};
 
     ngOnInit(): void {
       this.start = false;

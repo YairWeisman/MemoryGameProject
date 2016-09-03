@@ -1,15 +1,16 @@
+<div *ngIf="showRestart">
+	<button (click)="restartGame()">Restart</button>
+</div>
+
 <ul class="cards">
-
-  	<li *ngFor="let card of cards | orderBy:random"
-	  [class.selected]="card === selectedCard"
-	  (click)="onSelect(card)">
-	  <img src="{{card.image}}">
+	<li *ngFor="let card of cards"
+	[class.selected]="card === selectedCard"
+	[ngClass]="card.status"
+	(click)="onSelect(card)">
+		{{card.id}}
+		<img *ngIf="card.status !== hidden" [src]="card.image">
+	<!-- class="col-md-8 col-sm-6 col-xs-4" -->
+	<!-- [ngClass]="cardVisibility"> -->
+	<!-- <img src="{{card.image}}"> -->
 	</li>
-
-	<li *ngFor="let card of cards | orderBy:random"
-	  [class.selected]="card === selectedCard"
-	  (click)="onSelect(card)">
-	  <img src="{{card.image}}">
-	</li>
-	
 </ul>

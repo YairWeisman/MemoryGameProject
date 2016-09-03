@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Card } from './card';
 import { Player } from './player';
-import { CardService } from './card.service';
 import { OnInit } from '@angular/core';
 import { DoCheck } from '@angular/core';
+import { AppComponent } from './app.component';
 
 @Component({
     selector: 'match-pairs',
@@ -17,39 +17,90 @@ export class GameComponent implements OnInit, DoCheck {
   	cards: Card[];
   	cardsPicked: number;
   	currentPlayer: Player;
-  	didntPlay: boolean;
-  	
+  	computerIsPlaying: boolean;
+  	showRestart: boolean;
+  	selectedCard: Card;
+
+  	CARDS = [
+	  new Card(1,1,'../images/1.png','hidden'),
+	  new Card(2,1,'../images/1.png','hidden'),
+	  new Card(3,2,'../images/2.png','hidden'),
+	  new Card(4,2,'../images/2.png','hidden'),
+	  new Card(5,3,'../images/3.png','hidden'),
+	  new Card(6,3,'../images/3.png','hidden'),
+	  new Card(7,4,'../images/4.png','hidden'),
+	  new Card(8,4,'../images/4.png','hidden'),
+	  new Card(9,5,'../images/5.png','hidden'),
+	  new Card(10,5,'../images/5.png','hidden'),
+	  new Card(11,6,'../images/6.png','hidden'),
+	  new Card(12,6,'../images/6.png','hidden'),
+	  new Card(13,7,'../images/7.png','hidden'),
+	  new Card(14,7,'../images/7.png','hidden'),
+	  new Card(15,8,'../images/8.png','hidden'),
+	  new Card(16,8,'../images/8.png','hidden'),
+	  new Card(17,9,'../images/9.png','hidden'),
+	  new Card(18,9,'../images/9.png','hidden'),
+	  new Card(19,10,'../images/10.png','hidden'),
+	  new Card(20,10,'../images/10.png','hidden')
+	];
+
 	constructor(
-	  	private cardService: CardService) {}
+		private appComponent: AppComponent) {}
+
+	// Pick between 4 to 10 cards.		
+	numOfCardsPlayed = Math.floor((Math.random()*7)+4);
 
 	ngOnInit(): void {
-		// Pick between 4 to 10 cards.		
-	    this.getCards(Math.floor((Math.random()*7)+4));
-	    this.currentPlayer = AppComponent.user;
+	    this.getCards(this.numOfCardsPlayed);
+	    this.currentPlayer = this.appComponent.user;
+	    this.cardsPicked = 0;
+	    this.showRestart = false;
+	    this.computerIsPlaying = false;
 	}
 		
 	getCards(numOfCards: number): void {
-	  	this.cardService.getCards().then(cards => this.cards = cards.slice(0, numOfCards));
+	  	this.cards = this.shuffle(this.CARDS.slice(0, numOfCards * 2));
 	}
 
 	ngDoCheck(): void {
-		if ((this.currentPlayer == AppComponent.computer) && (this.didntPlay)) {
-
-			this.didntPlay = false;
-
-			let card1 = CardService.getCard(getRandomNum());
-			let card2 = CardService.getCard(getRandomNum());
-
-			while (!validPick(card1))
-				card1 = CardService.getCard(getRandomNum());
-			this.onSelect(card1);
-
-			while (!validPick(card2))
-				card2 = CardService.getCard(getRandomNum());
-			this.onSelect(card2);
-
-			this.didntPlay = true;
+		// Check if game over
+		if (this.appComponent.user.score + this.appComponent.computer.score == this.numOfCardsPlayed) {
+			let diff = this.appComponent.user.score - this.appComponent.computer.score;
+			// user won
+			if (diff > 0) {
+				alert('You Won by ' + diff + ' points');
+			}
+			// user lost
+			else if (diff < 0) {
+				alert('You Lost by ' + (-1 * diff) + ' points');
+			}
+			// tie
+			else {
+				alert("It's a tie!");
+			}
+			this.showRestart = true;
 		}
+
+		// Check if computer turn
+		else if ((this.currentPlayer == this.appComponent.computer) && (!this.computerIsPlaying)) {
+			this.computerIsPlaying = true;
+			this.computerFirstPick();
+		}
+	}
+
+	computerFirstPick(): void {
+		this.firstSelect = this.getRandomeCard();
+		while (!this.validPick(this.firstSelect))
+			this.firstSelect = this.getRandomeCard();
+		this.onSelect(this.firstSelect);
+		setTimeout(() => {this.computerSecondPick();}, 1000);
+	}
+
+	computerSecondPick(): void {
+		this.secondSelect = this.getRandomeCard();
+		while ((this.secondSelect === this.firstSelect) || (!this.validPick(this.secondSelect)))
+			this.secondSelect = this.getRandomeCard();
+		this.onSelect(this.secondSelect);
 	}
 
 	validPick(card: Card): boolean {
@@ -59,42 +110,72 @@ export class GameComponent implements OnInit, DoCheck {
 	}
 
   	onSelect(card: Card): void {
-  		if (validPick(card)){
-	  		if (cardsPicked === 0) {
+  		if (this.validPick(card)){
+	  		this.selectedCard = card;
+	  		if (this.cardsPicked == 0) {
 		  		this.firstSelect = card;
-		  		this.cardsPicked++;
-		  		card.status = 'peeked';
+		  		this.cardsPicked = 1;
+		  		this.firstSelect.changeStatus('peeked');
+		  		console.log('first pick');
 	  		}
 	  		else {
+	  			console.log('second pick');
 	  			this.cardsPicked = 0;
 	  			this.secondSelect = card;
-	  			card.status = 'peeked';
-	  			
-	  			setTimeout(2000);
-	  			
-	  			if (this.firstSelect === this.secondSelect) {
-	  				this.firstSelect.status = 'shown';
-	  				this.secondSelect = 'shown';
-	  				this.currentPlayer.score++;
-	  			}
-	  			else {
-	  				this.firstSelect.status = 'hidden';
-	  				this.secondSelect = 'hidden';
-	  				if (this.currentPlayer == AppComponent.computer)
-	  					this.currentPlayer = AppComponent.user;
-	  				else this.currentPlayer = AppComponent.computer;	  				
-	  			}
+	  			this.secondSelect.changeStatus('peeked');
+	  			setTimeout(() => {this.getResult(card);}, 1000);
 	  		}  			
   		}
 	}
 
+	getResult(card: Card): void {
+		if (this.firstSelect.id == this.secondSelect.id) {
+			this.firstSelect.changeStatus('shown');
+			this.secondSelect.changeStatus('shown');
+			this.currentPlayer.score++;
+			this.firstSelect = null;
+			this.secondSelect = null;
+			this.selectedCard = null;
+			if (this.currentPlayer == this.appComponent.computer)
+				setTimeout(() => {this.computerFirstPick();}, 1000);
+		}
+		else {
+			this.firstSelect.changeStatus('hidden');
+			this.secondSelect.changeStatus('hidden');
+			this.firstSelect = null;
+			this.secondSelect = null;
+			this.selectedCard = null;
+			if (this.currentPlayer == this.appComponent.computer){
+				this.currentPlayer = this.appComponent.user;
+				this.computerIsPlaying = false;
+			}
+			else this.currentPlayer = this.appComponent.computer;	  				
+		}
+	}
+
 	getRandomNum(): number {
-		return Math.floor((Math.random()*numOfCards)+1);
+		return Math.floor((Math.random()*this.numOfCardsPlayed)+1);
+	}
+
+	getRandomeCard(): Card {
+		return this.cards[Math.floor(Math.random()*this.numOfCardsPlayed*2)];
 	}
 
 	random(): number {
 		return Math.random();
 	}
+	
+	shuffle(array : Card[]): Card[] {
+		let copy: Card[] , n = array.length, i = 0;
+		copy = [];
+		while (n) {
+		    i = Math.floor(Math.random() * n--);
+		    copy.push(array.splice(i, 1)[0]);
+		}
+		return copy;
+	}
+
+	restartGame() : void {
+		window.location.reload();
+	}
 }
-
-

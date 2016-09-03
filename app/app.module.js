@@ -13,7 +13,6 @@ var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var app_component_1 = require('./app.component');
 var game_component_1 = require('./game.component');
-var card_service_1 = require('./card.service');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -27,9 +26,7 @@ var AppModule = (function () {
                 app_component_1.AppComponent,
                 game_component_1.GameComponent
             ],
-            providers: [
-                card_service_1.CardService
-            ],
+            providers: [],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])

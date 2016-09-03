@@ -1,0 +1,57 @@
+/* Master Styles */
+.container {
+  background: #fff;
+  border-radius: 6px;
+  margin: 10px;
+  width: auto;
+  text-align: center;
+}
+h1 {
+  color: #337ab7; 
+  font-family: Fauna One, Arial, Helvetica, sans-serif;   
+  font-size: 300%;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 200%;
+  }
+}
+@media (max-width: 500px) {
+  h1 {
+    font-size: 100%;
+  }
+}
+
+h1.scoreboard {
+  word-spacing: 30px;
+
+}
+body { 
+  text-align: center;
+  margin: 2em; 
+}
+body, input[text], button { 
+  color: #888; 
+  font-family: Cambria, Georgia; 
+}
+input {
+  border-radius: 4px;
+  line-height: 20px;
+}
+button {
+  font-family: Arial;
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  cursor: hand;
+}
+button:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
