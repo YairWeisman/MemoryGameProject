@@ -66,9 +66,11 @@ export class GameComponent implements OnInit, DoCheck {
 		// Check if game over
 		if (this.appComponent.user.score + this.appComponent.computer.score == this.numOfCardsPlayed) {
 			let diff = this.appComponent.user.score - this.appComponent.computer.score;
+			let unit = '';
+			(diff == 1)? (unit = ' point') : (unit=' points');
 			// user won
 			if (diff > 0) {
-				alert('You Won by ' + diff + ' points');
+				alert('You Won by ' + diff + unit);
 			}
 			// user lost
 			else if (diff < 0) {

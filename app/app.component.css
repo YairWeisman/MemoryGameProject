@@ -32,8 +32,8 @@ body {
   margin: 2em; 
 }
 body, input[text], button { 
-  color: #888; 
-  font-family: Cambria, Georgia; 
+  color: #337ab7;
+  font-family: Fauna One, Arial, Helvetica, sans-serif; 
 }
 input {
   border-radius: 4px;

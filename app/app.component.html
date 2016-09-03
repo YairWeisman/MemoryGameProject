@@ -2,7 +2,7 @@
 	<div *ngIf="!(start)">
 		<h1>Match Pairs Game</h1>
 	    <input type="text" class="form-control input-lg" [(ngModel)]="user.name" placeholder=" Enter your name" />
-	    <button class="btn btn-primary btn-lg" type="submit" (click)="startGame()">Start</button>
+	    <button (click)="startGame()">Start</button>
 	</div>
 	
 	<div *ngIf="start">
